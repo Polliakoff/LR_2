@@ -77,15 +77,6 @@ void KS_type::vvod() {
 			continue;
 		}
 	}
-	
-	while (true) {
-		if (temp_int <= this->workshop_number) {
-			this->working_workshops = temp_int;
-			break;
-		}
-		else cout << "Введите число <= числа цехов"<<endl;
-		cin >> temp_int;
-	}
 
 	cout << "Введите эффективность КС" << endl;
 	
