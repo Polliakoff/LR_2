@@ -24,7 +24,7 @@ int main() {
 				<< "3 - Просмотр объектов " << endl << "4 - Редактировать трубу " << endl
 					<< "5 - Редактировать КС " << endl << "6 - Сохранить (Файлы перезаписываются) " << endl 
 						<< "7 - Загрузить (Загруженные структуры добавятся к существующим и получат соответвующие ID)" 
-							<< endl <<"8 - Вывести по параметрам "<<endl<<"9 - Вывести по id/названию "<<endl<< "0 - Выйти" << endl;
+							<< endl <<"8 - Вывести/редактировать трубы по фильтрам"<<endl<<"9 - Вывести/редактировать КС по фильтрам "<<endl<< "0 - Выйти" << endl;
 		
 		string selection; //переменная выбора действия
 		cin >> selection;
@@ -216,20 +216,32 @@ int main() {
 
 
 			case 8: {
-				cout << "Выберите класс выводимых объектов 1 - Трубы, 2 - КС " << endl;
+
+				vector<size_t> found;
+				bool are_there_any = false; //для определения нашли ли мы хоть что то 
+				cout << "Выберите вариант фильтрации: " << endl<<
+					"1 - Вывод по признаку в ремонете"<< endl<< "2 - Вывод по названию трубы "<<endl
+						<<"3 - Вывод по названию и признаку в ремонте"<<endl;
+
 				selection = "";
 				while (true) {
 					cin >> selection;
 					if (is_int(selection) == true) {
-						if (stoi(selection) == 1) {
-							cout << "В ремонте ли труба? (y/n)"<<endl;
+						
+						switch (stoi(selection)) {
+						
+						case 1: {
+
+							cout << "В ремонте ли труба? (y/n)" << endl;
 							selection = "";
 							while (true) {
 								cin >> selection;
 								if (selection == "y") {
 									for (auto i : pipes) {
 										if (i.in_servise == true) {
+											found.push_back(i.id);
 											i.vivod();
+											are_there_any = true;
 										}
 									}
 									break;
@@ -237,7 +249,9 @@ int main() {
 								else if (selection == "n") {
 									for (auto i : pipes) {
 										if (i.in_servise == false) {
+											found.push_back(i.id);
 											i.vivod();
+											are_there_any = true;
 										}
 									}
 									break;
@@ -247,18 +261,186 @@ int main() {
 									continue;
 								}
 							}
-							break;
+
+							if (are_there_any == false) {
+								cout << "Не найден ни один объект по заданным параметрам" << endl;
+							}
 						}
-						else if (stoi(selection) == 2) {
-							cout << "Введите эффективность КС" << endl;
+							  break;
 							
+						case 2: {
+
+							cout << "Введите название Трубы, которую необходимо вывести " << endl;
+							string name_selection;
+							bool correct_check = false;
+							cin >> name_selection;
+							for (size_t i = 0; i < pipes.size(); i++) {
+								if (pipes[i].name == name_selection) {
+									correct_check = true;
+									found.push_back(i);
+									pipes[i].vivod();
+									are_there_any = true;
+								}
+							}
+							if (correct_check == false) {
+								cout << "Введите одно из названий cуществующих Труб (можно посмотреть командой 3)" << endl;
+							}
+
+
+							if (are_there_any == false) {
+								cout << "Не найден ни один объект по заданным параметрам" << endl;
+							}
+						}
+							  break;
+						case 3: {
+							cout << "В ремонте ли труба? (y/n)" << endl;
+							selection = "";
+							bool service;
+							while (true) {
+								cin >> selection;
+								if (selection != "y" && selection != "n") {
+									cout << "Введите y или n" << endl;
+									continue;
+								}
+								else {
+									if (selection == "y") {
+										service = 1;
+									}
+									else {
+										service = 0;
+									}
+									break;
+								}
+							}
+
+							cout << "Введите название Трубы, которую необходимо вывести " << endl;
+							
+							string name_selection;
+							bool correct_check = false;
+							string name;
+							
+							cin >> name_selection;
+							for (size_t i = 0; i < pipes.size(); i++) {
+								if (pipes[i].name == name_selection) {
+									correct_check = true;
+									name = pipes[i].name;
+								}
+							}
+							if (correct_check == false) {
+								cout << "Введите одино из названий cуществующих Труб (можно посмотреть командой 3)" << endl;
+								break;
+							}
+
+							for (size_t i = 0; i < pipes.size(); i++) {
+							 
+								if (pipes[i].name == name && pipes[i].in_servise == service) {
+									found.push_back(i);
+									pipes[i].vivod();
+									are_there_any = true;
+								}
+							}
+
+
+							if (are_there_any == false) {
+								cout << "Не найден ни один объект по заданным параметрам"<<endl;
+							}
+
+						}
+							  break;
+
+						default :{
+							cout << "Введите 1 - 3" << endl;
+							}
+								break;
+
+
+
+						}
+						if (are_there_any == true) {
+							cout << "Хотите редактировать найденные трубы? (y/n)" << endl;
+							size_t t = 0;
+							while (true) {
+								cin >> selection;
+								if (selection == "y") {
+									while (t < found.size()) {
+										for (size_t i = 0; i < pipes.size(); i++) {
+											if (pipes[i].id == found[t]) {
+												t++;
+												cout << "Ви хотите изменить измерения трубы " << t - 1 << " или только статуc ремонта?"
+													<< endl << "Измерения - 1, Статус ремонта - 2" << endl;
+												while (true) {
+													cin >> temp_string;
+													if (temp_string == "1") {
+														pipes[i].vvod();
+														pipes[i].vivod();
+														break;
+													}
+													else if (temp_string == "2") {
+														pipes[i].servise();
+														pipes[i].vivod();
+														break;
+													}
+													else {
+														cout << "Введите 1 или 2 " << endl;
+													}
+												}
+												break;
+											}
+										}
+									}
+									t = 0;
+									break;
+								}
+								else if (selection == "n") {
+									found.clear();
+									break;
+								}
+								else {
+									cout << "Введите y или n" << endl;
+								}
+							}
+						}
+
+					}
+					else {
+						cout << "Введите 1 - 3" << endl;
+						continue;
+					}
+					break;
+				}
+
+
+			}
+				  break;
+
+			case 9: {
+
+				vector<size_t> found;
+				bool are_there_any = false; //для определения нашли ли мы хоть что то 
+				cout << "Выберите вариант фильтрации: " << endl <<
+					"1 - Вывод по эффективности" << endl << "2 - Вывод по названию КС " << endl
+					<< "3 - Вывод по названию и эффективности" << endl;
+
+				selection = "";
+				while (true) {
+					cin >> selection;
+					if (is_int(selection) == true) {
+
+						switch (stoi(selection)) {
+
+						case 1: {
+
+							cout << "Введите эффективность КС" << endl;
+
 							while (true) {
 								cin >> temp_string;
-								if (is_double(temp_string)==true) {
-									if (stod(temp_string)>0 && stod(temp_string) < 1) {
+								if (is_double(temp_string) == true) {
+									if (stod(temp_string) > 0 && stod(temp_string) < 1) {
 										for (auto i : KS_es) {
 											if (i.effectiveness == stod(temp_string)) {
+												found.push_back(i.id);
 												i.vivod();
+												are_there_any = true;
 											}
 										}
 										break;
@@ -274,82 +456,157 @@ int main() {
 								}
 							}
 
-							break;
-						}
-						else {
-							cout << "Введите 1 или 2" << endl;
-							continue;
-						}
-					}
-					else {
-						cout << "Введите 1 или 2" << endl;
-						continue;
-					}
-				}
-
-
-			}
-				  break;
-
-			case 9: {
-				cout << "Выберите класс выводимых объектов 1 - Трубы, 2 - КС " << endl;
-				while (true) {
-					cin >> selection;
-					if (is_int(selection) == true) {
-						if (stoi(selection) == 1) {
-							cout << "Введите id трубы которую необходимо вывести " << endl;
-							string id_selection;
-							bool correct_check = false;
-							cin >> id_selection;
-							if (is_int(id_selection) == true) {
-								for (size_t i = 0; i < pipes.size(); i++) {
-									if (pipes[i].id == stoi(id_selection)) {
-										correct_check = true;
-										pipes[i].vivod();
-									}
-								}
-								if (correct_check == false) {
-									cout << "Введите один из id cуществующих труб (можно посмотреть командой 3)" << endl;
-								}
+							if (are_there_any == false) {
+								cout << "Не найден ни один объект по заданным параметрам" << endl;
 							}
-							else {
-								cout << "Введите один из id cуществующих труб (можно посмотреть командой 3)" << endl;
-							}
-							break;
 						}
-						else if (stoi(selection) == 2) {
-							
+							  break;
+
+						case 2: {
+
 							cout << "Введите название КС, которую необходимо вывести " << endl;
 							string name_selection;
 							bool correct_check = false;
 							cin >> name_selection;
-								for (size_t i = 0; i < KS_es.size(); i++) {
-									if (KS_es[i].name == name_selection) {
-										correct_check = true;
-										KS_es[i].vivod();
+							for (size_t i = 0; i < KS_es.size(); i++) {
+								if (KS_es[i].name == name_selection) {
+									correct_check = true;
+									found.push_back(i);
+									KS_es[i].vivod();
+									are_there_any = true;
+								}
+							}
+							if (correct_check == false) {
+								cout << "Введите одино из названий cуществующих КС (можно посмотреть командой 3)" << endl;
+							}
+							
+							if (are_there_any == false) {
+								cout << "Не найден ни один объект по заданным параметрам" << endl;
+							}
+						}
+							  break;
+						case 3: {
+							
+							double effectiveness;
+							cout << "Введите эффективность КС" << endl;
+
+							while (true) {
+								cin >> temp_string;
+								if (is_double(temp_string) == true) {
+									if (stod(temp_string) > 0 && stod(temp_string) < 1) {
+										effectiveness = stod(temp_string);
+										break;
+									}
+									else {
+										cout << "Введите вещественное число больше нуля и меньше единицы" << endl;
+										continue;
 									}
 								}
-								if (correct_check == false) {
-									cout << "Введите одино из названий cуществующих КС (можно посмотреть командой 3)" << endl;
+								else {
+									cout << "Введите вещественное число больше нуля и меньше единицы" << endl;
+									continue;
 								}
-							
+							}
+
+							cout << "Введите название КС, которую необходимо вывести " << endl;
+
+							string name_selection;
+							bool correct_check = false;
+							string name;
+
+							cin >> name_selection;
+							for (size_t i = 0; i < KS_es.size(); i++) {
+								if (KS_es[i].name == name_selection) {
+									correct_check = true;
+									name = KS_es[i].name;
+								}
+							}
+							if (correct_check == false) {
+								cout << "Введите одино из названий cуществующих КС (можно посмотреть командой 3)" << endl;
+								break;
+							}
+
+							for (size_t i = 0; i < KS_es.size(); i++) {
+
+								if (KS_es[i].name == name && KS_es[i].effectiveness == effectiveness) {
+									found.push_back(i);
+									KS_es[i].vivod();
+									are_there_any = true;
+								}
+							}
 
 
-							break;
+							if (are_there_any == false) {
+								cout << "Не найден ни один объект по заданным параметрам" << endl;
+							}
+
 						}
-						else {
-							cout << "Введите 1 или 2" << endl;
-							continue;
+							  break;
+
+						default: {
+							cout << "Введите 1 - 3" << endl;
 						}
+							   break;
+
+
+
+						}
+						if (are_there_any == true) {
+							cout << "Хотите редактировать найденные КС? (y/n)" << endl;
+							size_t t = 0;
+							while (true) {
+								cin >> selection;
+								if (selection == "y") {
+									while (t < found.size()) {
+										for (size_t i = 0; i < KS_es.size(); i++) {
+											if (KS_es[i].id == found[t]) {
+												t++;
+												cout << "Ви хотите изменить измерения КС " << t - 1 << " или только число работающих цехов?"
+													<< endl << "Измерения - 1, Кол-во цехов - 2" << endl;
+												while (true) {
+													cin >> temp_string;
+													if (temp_string == "1") {
+														KS_es[i].vvod();
+														KS_es[i].vivod();
+														break;
+													}
+													else if (temp_string == "2") {
+														KS_es[i].number_working();
+														KS_es[i].vivod();
+														break;
+													}
+													else {
+														cout << "Введите 1 или 2 " << endl;
+													}
+												}
+												break;
+											}
+										}
+									}
+									t = 0;
+									break;
+								}
+								else if (selection == "n") {
+									found.clear();
+									break;
+								}
+								else {
+									cout << "Введите y или n" << endl;
+								}
+
+
+
+							}
+						}
+
+
 					}
 					else {
-						cout << "Введите 1 или 2" << endl;
+						cout << "Введите 1 - 3" << endl;
 						continue;
 					}
+					break;
 				}
-
-
-
 
 
 			}

@@ -15,9 +15,29 @@ truba_type::~truba_type()
 
 void truba_type::vvod() {
 	
+	bool error;//Логическая переменная использующаяся для определения ошибки
 	string temp_string;//временная строка
 
 	cout << endl << "Введите параметры для Трубы:" << endl;
+
+	cout << "Введите название трубы" << endl;
+
+	while (true) {
+		cin >> temp_string;
+		error = false;
+		for (auto i : temp_string) {
+			if (i == '|') {
+				cout << "Вы ввели зарезервированный символ |, введите другое нзвание" << endl;
+				error = true;
+			}
+		}
+
+		if (error == false) {
+			this->name = temp_string;
+			break;
+		}
+	}
+
 
 	cout << "Введите длину трубы" << endl;
 
@@ -61,6 +81,8 @@ void truba_type::vivod() {
 	cout << endl <<"Параметры Трубы "<<this->id<< endl;
 
 	cout << "Id трубы : "<< this->id << endl;
+
+	cout << "Название трубы: " << this->name << endl;
 
 	cout << "Длина трубы: "<< this->length << endl;
 
@@ -134,7 +156,7 @@ void truba_type::servise() {
 
 void truba_type::save(std::ofstream& fout) {
 
-	fout <<"t"<<"|"<<this->id<<"|"<< this->length << "|" <<
+	fout <<"t"<<"|"<<this->id<<"|" << this->name << "|" << this->length << "|" <<
 		this->diameter << "|" <<this->in_servise << "|" <<endl;
 	cout << "Труба " << this->id << " Успешно Сохранена!" << endl;
 
@@ -157,19 +179,23 @@ void truba_type::load(std::ifstream& fin, std::string load_string) {
 			else {
 				switch (j) {
 				case 1:
+					this->name = temp_string;
+					break;
+				
+				case 2:
 					for (int k = 0; k < temp_string.length(); k++) {
 						if (temp_string[k] == '.') temp_string[k] = ',';
 					}
 					this->length = stod(temp_string);
 					break;
-				case 2:
+				case 3:
 					for (int k = 0; k < temp_string.length(); k++) {
 						if (temp_string[k] == '.') temp_string[k] = ',';
 					}
 					this->diameter = stod(temp_string);
 					break;
 
-				case 3:
+				case 4:
 					this->in_servise = stoi(temp_string);
 					cout << "Труба " << this->id << " Успешно Загружена!" << endl;
 					this->is_loaded = true;

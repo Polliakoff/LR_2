@@ -16,6 +16,7 @@ public:
 	
 	//параметры
 	int id;
+	std::string name;
 	double length;
 	double diameter;
 	bool in_servise = false;
