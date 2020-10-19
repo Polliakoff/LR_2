@@ -77,21 +77,9 @@ void KS_type::vvod() {
 			continue;
 		}
 	}
-
-	cout << "Введите эффективность КС" << endl;
 	
-	while (true) {
-		cin >> temp_string;
-
-		if (is_double(temp_string) == true && stod(temp_string)<=1) {
-			this->effectiveness = stod(temp_string);
-			break;
-		}
-		else {
-			cout << "Введите вещественное число меньше единицы" << endl;
-		}
-
-	}
+	
+	this->effectiveness = int((double(this->working_workshops) / double(this->workshop_number)) * 100 + 0.5) / 100.0;
 	
 	this->is_loaded = true;
 	cout << "Ввод парамтеров завершен" << endl;
@@ -110,7 +98,7 @@ void KS_type::vivod() {
 
 		cout << "Число работающих цехов КС: " << this->working_workshops << endl;
 
-		cout << "Эффективность КС: " << this->effectiveness << endl;
+		cout << "Эффективность КС (Процетов): " << this->effectiveness << endl;
 	}
 	else {
 		cout << endl << "Структура КС пуста!" << endl;

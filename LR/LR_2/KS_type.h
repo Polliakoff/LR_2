@@ -4,6 +4,7 @@
 #include <string>;
 #include <fstream>;
 #include "func.h"
+#include <iomanip>
 
 struct KS_type
 {
@@ -20,7 +21,7 @@ public:
 	std::string name;
 	int workshop_number;
 	int working_workshops;
-	double effectiveness;
+	double effectiveness=0;
 	bool is_loaded = false;
 
 	//методы	

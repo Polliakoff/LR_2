@@ -21,10 +21,10 @@ int main() {
 
 		cout << "Выберите действие которое необходимо осуществить: " <<
 			endl << "1 - Добавить трубу " << endl << "2 - Добавить КС " << endl
-				<< "3 - Просмотр всех объектов " << endl << "4 - Редактировать трубу " << endl
+				<< "3 - Просмотр объектов " << endl << "4 - Редактировать трубу " << endl
 					<< "5 - Редактировать КС " << endl << "6 - Сохранить (Файлы перезаписываются) " << endl 
 						<< "7 - Загрузить (Загруженные структуры добавятся к существующим и получат соответвующие ID)" 
-							<< endl << "0 - Выйти" << endl;
+							<< endl <<"8 - Вывести по параметрам "<<endl<<"9 - Вывести по id/названию "<<endl<< "0 - Выйти" << endl;
 		
 		string selection; //переменная выбора действия
 		cin >> selection;
@@ -52,9 +52,9 @@ int main() {
 			}
 				break;
 			case 3: {
-
+				
 				if (pipes.size() == 0 && KS_es.size() == 0) {
-					cout << endl << "На данный момент в оперативной памяти нет ни одного объекта"<<endl;
+					cout << endl << "На данный момент в оперативной памяти нет ни одного объекта" << endl;
 				}
 				else {
 					for (auto i : pipes) {
@@ -65,7 +65,7 @@ int main() {
 						i.vivod();
 					}
 				}
-				
+
 			}
 				break;
 
@@ -213,6 +213,150 @@ int main() {
 			}
 				break;
 			
+
+
+			case 8: {
+				cout << "Выберите класс выводимых объектов 1 - Трубы, 2 - КС " << endl;
+				selection = "";
+				while (true) {
+					cin >> selection;
+					if (is_int(selection) == true) {
+						if (stoi(selection) == 1) {
+							cout << "В ремонте ли труба? (y/n)"<<endl;
+							selection = "";
+							while (true) {
+								cin >> selection;
+								if (selection == "y") {
+									for (auto i : pipes) {
+										if (i.in_servise == true) {
+											i.vivod();
+										}
+									}
+									break;
+								}
+								else if (selection == "n") {
+									for (auto i : pipes) {
+										if (i.in_servise == false) {
+											i.vivod();
+										}
+									}
+									break;
+								}
+								else {
+									cout << "Введите y или n" << endl;
+									continue;
+								}
+							}
+							break;
+						}
+						else if (stoi(selection) == 2) {
+							cout << "Введите эффективность КС" << endl;
+							
+							while (true) {
+								cin >> temp_string;
+								if (is_double(temp_string)==true) {
+									if (stod(temp_string)>0 && stod(temp_string) < 1) {
+										for (auto i : KS_es) {
+											if (i.effectiveness == stod(temp_string)) {
+												i.vivod();
+											}
+										}
+										break;
+									}
+									else {
+										cout << "Введите вещественное число больше нуля и меньше единицы" << endl;
+										continue;
+									}
+								}
+								else {
+									cout << "Введите вещественное число больше нуля и меньше единицы" << endl;
+									continue;
+								}
+							}
+
+							break;
+						}
+						else {
+							cout << "Введите 1 или 2" << endl;
+							continue;
+						}
+					}
+					else {
+						cout << "Введите 1 или 2" << endl;
+						continue;
+					}
+				}
+
+
+			}
+				  break;
+
+			case 9: {
+				cout << "Выберите класс выводимых объектов 1 - Трубы, 2 - КС " << endl;
+				while (true) {
+					cin >> selection;
+					if (is_int(selection) == true) {
+						if (stoi(selection) == 1) {
+							cout << "Введите id трубы которую необходимо вывести " << endl;
+							string id_selection;
+							bool correct_check = false;
+							cin >> id_selection;
+							if (is_int(id_selection) == true) {
+								for (size_t i = 0; i < pipes.size(); i++) {
+									if (pipes[i].id == stoi(id_selection)) {
+										correct_check = true;
+										pipes[i].vivod();
+									}
+								}
+								if (correct_check == false) {
+									cout << "Введите один из id cуществующих труб (можно посмотреть командой 3)" << endl;
+								}
+							}
+							else {
+								cout << "Введите один из id cуществующих труб (можно посмотреть командой 3)" << endl;
+							}
+							break;
+						}
+						else if (stoi(selection) == 2) {
+							
+							cout << "Введите название КС, которую необходимо вывести " << endl;
+							string name_selection;
+							bool correct_check = false;
+							cin >> name_selection;
+								for (size_t i = 0; i < KS_es.size(); i++) {
+									if (KS_es[i].name == name_selection) {
+										correct_check = true;
+										KS_es[i].vivod();
+									}
+								}
+								if (correct_check == false) {
+									cout << "Введите одино из названий cуществующих КС (можно посмотреть командой 3)" << endl;
+								}
+							
+
+
+							break;
+						}
+						else {
+							cout << "Введите 1 или 2" << endl;
+							continue;
+						}
+					}
+					else {
+						cout << "Введите 1 или 2" << endl;
+						continue;
+					}
+				}
+
+
+
+
+
+			}
+				  break;
+
+
+
 			case 0: {
 				return 0;
 			}
@@ -227,8 +371,8 @@ int main() {
 		else {
 			cout << "введите цифру от 0 до 7 для выбора действия" << endl;
 		}
-		system("pause");
-		system("cls");
+		std::system("pause");
+		std::system("cls");
 	}
 	return 0;
 }
