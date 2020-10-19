@@ -24,7 +24,8 @@ int main() {
 				<< "3 - Просмотр объектов " << endl << "4 - Редактировать трубу " << endl
 					<< "5 - Редактировать КС " << endl << "6 - Сохранить (Файлы перезаписываются) " << endl 
 						<< "7 - Загрузить (Загруженные структуры добавятся к существующим и получат соответвующие ID)" 
-							<< endl <<"8 - Вывести/редактировать трубы по фильтрам"<<endl<<"9 - Вывести/редактировать КС по фильтрам "<<endl<< "0 - Выйти" << endl;
+							<< endl <<"8 - Вывести/редактировать трубы по фильтрам"<<endl<<"9 - Вывести/редактировать КС по фильтрам "
+								<<endl<<"10 - Удаление Трубы"<<endl<<"11 - Удаление КС"<<endl<< "0 - Выйти" << endl;
 		
 		string selection; //переменная выбора действия
 		cin >> selection;
@@ -612,21 +613,85 @@ int main() {
 			}
 				  break;
 
+			case 10:{
+				if (pipes.size() > 0) {
+					cout << endl << "Введите id Трубы, которую хотите удалить " << endl;
+					string id_selection;
+					bool correct_check = false;
+					cin >> id_selection;
+					if (is_int(id_selection) == true) {
+						for (size_t i = 0; i < pipes.size(); i++) {
+							if (pipes[i].id == stoi(id_selection)) {
+								int temp_id = pipes[i].id;
+								correct_check = true;
+								pipes.erase(pipes.begin() + i);
+								cout << "Труба " << temp_id << " Успешно удалена " << endl;
+								break;
+							}
+						}
+						if (correct_check == false) {
+							cout << "Введите один из id cуществующих труб (можно посмотреть командой 3)" << endl;
+						}
+					}
+					else {
+						cout << "Введите один из id cуществующих труб (можно посмотреть командой 3)" << endl;
+					}
+				}
+				else {
+					cout << "На данный момент в оперативной памяти нет ни одной трубы" << endl;
+				}
+			}
+				 break;
+
+
+
+			case 11: {
+				if (KS_es.size() > 0) {
+					cout << endl << "Введите id КС, которую хотите удалить " << endl;
+					string id_selection;
+					bool correct_check = false;
+					cin >> id_selection;
+					if (is_int(id_selection) == true) {
+						for (size_t i = 0; i < KS_es.size(); i++) {
+							if (KS_es[i].id == stoi(id_selection)) {
+								
+								int temp_id = KS_es[i].id;
+								correct_check = true;
+								KS_es.erase(KS_es.begin() + i);
+								cout << "КС " << temp_id << " Успешно удалена " << endl;
+								break;
+	                            
+
+							}
+						}
+						if (correct_check == false) {
+							cout << "Введите один из id cуществующих КС (можно посмотреть командой 3)" << endl;
+						}
+					}
+					else {
+						cout << "Введите один из id cуществующих КС (можно посмотреть командой 3)" << endl;
+					}
+				}
+				else {
+					cout << "На данный момент в оперативной памяти нет ни одной КС" << endl;
+				}
+			}
+				  break;
 
 
 			case 0: {
 				return 0;
 			}
-				break;
+				  break;
 
 			default: {
-				cout << "введите цифру от 0 до 7 для выбора действия" << endl;
+				cout << "введите цифру от 0 до 11 для выбора действия" << endl;
 			}
-
+				   break;
 			}
 		}
 		else {
-			cout << "введите цифру от 0 до 7 для выбора действия" << endl;
+			cout << "введите цифру от 0 до 11 для выбора действия" << endl;
 		}
 		std::system("pause");
 		std::system("cls");
