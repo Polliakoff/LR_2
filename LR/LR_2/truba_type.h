@@ -7,20 +7,20 @@
 
 struct truba_type
 {
-	//id
-private:
-	
-	static int sId;
+
 	
 public:	
 	
+
+	//id
+	static int sId;
+
 	//параметры
 	int id;
 	std::string name;
 	double length;
 	double diameter;
 	bool in_servise = false;
-	bool is_loaded = false;
 
 	//методы
 	void vvod();
@@ -29,7 +29,6 @@ public:
 	void save(std::ofstream& fout);
 	void load(std::ifstream& fin, std::string load_string);
 	truba_type();
-	~truba_type();
 
 };
 

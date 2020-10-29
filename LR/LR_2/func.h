@@ -1,8 +1,12 @@
 #pragma once
 //квази-класс в котором лежат все функции
 #include <string> 
+#include <iostream>
+#include <limits>
+#include <vector>
 
 
-bool is_int(std::string temp_string);
-bool is_double(std::string& temp_string);
 
+void menu();
+void input_and_check(double& subject, const bool& int_check = 0);
+void name_check(std::string& name);

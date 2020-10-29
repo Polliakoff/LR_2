@@ -7,69 +7,33 @@ KS_type::KS_type() :id(sId++) {
 
 }
 
-KS_type::~KS_type()
-{
-
-}
-
 void KS_type::vvod() {
 	
-	string temp_string;//временная строка
-	bool error;//Логическая переменная использующаяся для определения ошибки
+	double input;
+	string name_input;
+
+
 	cout << endl << "Введите параметры для КС:" << endl;
 
 
-
 	cout << "Введите название КС" << endl;
-	
-	while (true) {
-		cin >> temp_string;
-		error = false;
-		for (auto i : temp_string) {
-			if (i == '|') {
-				cout << "Вы ввели зарезервированный символ |, введите другое нзвание" << endl;
-				error = true;
-			}
-		}
-
-		if (error == false) {
-			this->name = temp_string;
-			break;
-		}
-	}
+	name_check(name_input);
+	this->name = name_input;
+    
 
 	cout << "Введите число цехов КС" << endl;
-	
-	while (true) {
-		cin >> temp_string;
 
-		if (is_int(temp_string) == true) {
-			this->workshop_number = stoi(temp_string);
-			break;
-		}
-		else {
-			cout << "Введите целое число" << endl;
-		}
+	input_and_check(input, 1);
+	this->workshop_number = input;
 
-	}
-
-	int temp_int; //Временная целочисленая переменная
 	
 	cout << "Введите число работающих цехов КС (<= числа цехов)" << endl;
 
 	while (true) {
-		cin >> temp_string;
+		input_and_check(input, 1);
 
-		if (is_int(temp_string) == true) {
-			temp_int = stoi(temp_string);
-		}
-		else {
-			cout << "Введите целое число" << endl;
-			continue;
-		}
-
-		if (temp_int <= this->workshop_number) {
-			this->working_workshops = temp_int;
+		if (input <= this->workshop_number) {
+			this->working_workshops = input;
 			break;
 		}
 		else {
@@ -81,13 +45,13 @@ void KS_type::vvod() {
 	
 	this->effectiveness = int((double(this->working_workshops) / double(this->workshop_number)) * 100 + 0.5) / 100.0;
 	
-	this->is_loaded = true;
+
+
 	cout << "Ввод парамтеров завершен" << endl;
 
 }
 
 void KS_type::vivod() {
-	if (this->is_loaded == true) {
 		cout << endl << "Параметры КС " << this->id << endl;
 
 		cout << "Id КС : " << this->id << endl;
@@ -98,68 +62,24 @@ void KS_type::vivod() {
 
 		cout << "Число работающих цехов КС: " << this->working_workshops << endl;
 
-		cout << "Эффективность КС (Процетов): " << this->effectiveness << endl;
-	}
-	else {
-		cout << endl << "Структура КС пуста!" << endl;
-	}
-
+		cout << "Эффективность КС : " << this->effectiveness << endl;
 }
 //изменение кол-ва рабочих цехов
-void KS_type::number_working() {
-
-	string temp_string; //временная строка
-
-	cout << endl << "Хотите ли вы отключить/включить цех КС? (y/n)" << endl;
-	cin >> temp_string;
-
+void KS_type::number_working() {    
+	double ammount = 0;
+	cout << "Введите число цехов (меньше нуля - выключить, больше нуля - включить)" << endl;
+	
 	while (true) {
-
-		if (temp_string == "y") {
-			break;
-		}
-		else if (temp_string == "n") {
-			return;
-		}
-		else {
-			cout << "Введите 'y' или 'n' (строчными буквами)";
-		}
-		cout << endl;
-		cin >> temp_string;
-	}
-
-
-
-
-	while (true) {
-		cout << endl << "Вы хотите отключить, включить цех или выйти? (+/-/q (quit))" << endl;
-		cin >> temp_string;
+		input_and_check(ammount, 1);
 		
-		if (temp_string == "+") {
-			if((this->working_workshops+1)<=this->workshop_number) this->working_workshops++;
+			if((this->working_workshops+ammount)<=this->workshop_number 
+				&& (this->working_workshops + ammount) >= 0) this->working_workshops = this->working_workshops+ammount;
 			else {
-				cout << "Достигнуто максимальное число работающих цехов";
+				cout << "Введите возможное число изменяемых цехов";
 				continue;
 			}
 			break;
-		}
-		else if (temp_string == "-") {
-			if ((this->working_workshops - 1) >= 0) this->working_workshops--;
-			else {
-				cout << "Работающих цехов уже нет";
-				continue;
-			}
-			break;
-		}
 		
-		else if (temp_string == "q") {
-			break;
-		}
-		
-		else {
-			cout << "Введите '+', '-' или 'q' (строчными буквами)";
-		}
-		cout << endl;
 	}
 
 	cout << "Число работающих цехов на данный момент :" << this->working_workshops << endl;
@@ -211,7 +131,6 @@ void KS_type::load(std::ifstream& fin, std::string load_string) {
 				}
 				this->effectiveness = stod(temp_string);
 				cout << "КС " << this->id << " Успешно Загружена!" << endl;
-				this->is_loaded = true;
 				break;
 			}
 

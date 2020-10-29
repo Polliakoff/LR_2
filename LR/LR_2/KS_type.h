@@ -8,13 +8,15 @@
 
 struct KS_type
 {
-	//id
-private:
-
-	static int sId;
+	
 
 
 public:
+
+
+	//id
+
+	static int sId;
 
 	//параметры
 	int id;
@@ -22,7 +24,6 @@ public:
 	int workshop_number;
 	int working_workshops;
 	double effectiveness=0;
-	bool is_loaded = false;
 
 	//методы	
 	void vvod();
@@ -31,7 +32,7 @@ public:
 	void save(std::ofstream& fout);
 	void load(std::ifstream& fin, std::string load_string);
 	KS_type();
-	~KS_type();
+
 
 
 
