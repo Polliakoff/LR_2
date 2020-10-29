@@ -18,15 +18,15 @@ void truba_type::vvod() {
 
 	cout << "Введите название трубы" << endl;
 	name_check(name_input);
-	this->name = name_input;
+	name = name_input;
 
 	cout << "Введите длину трубы" << endl;
 	input_and_check(input);
-	this->length = input;
+	length = input;
 
 	cout << "Введите диаметр трубы" << endl;
 	input_and_check(input);
-	this->diameter = input;
+	diameter = input;
 
 	cout << "Ввод парамтеров завершен"<<endl;
 
@@ -34,19 +34,19 @@ void truba_type::vvod() {
 
 void truba_type::vivod() {
 
-	cout << endl <<"Параметры Трубы "<<this->id<< endl;
+	cout << endl <<"Параметры Трубы "<<id<< endl;
 
-	cout << "Id трубы : "<< this->id << endl;
+	cout << "Id трубы : "<< id << endl;
 
-	cout << "Название трубы: " << this->name << endl;
+	cout << "Название трубы: " << name << endl;
 
-	cout << "Длина трубы: "<< this->length << endl;
+	cout << "Длина трубы: "<< length << endl;
 
-	cout << "Диаметр трубы: "<< this->diameter << endl;
+	cout << "Диаметр трубы: "<< diameter << endl;
 
 	string service_status; //временная строка
 
-	if (this->in_servise == 1) service_status = "yes";
+	if (in_servise == 1) service_status = "yes";
 	else service_status = "no";
 
 	cout << "В ремонте ли труба (yes/no) : \t "<< service_status << endl;
@@ -63,11 +63,11 @@ void truba_type::servise() {
 		while (true) {
 
 			if (input == "y") {
-				this->in_servise = 1;
+				in_servise = 1;
 				break;
 			}
 			else if (input == "n") {
-				this->in_servise = 0;
+				in_servise = 0;
 				break;
 			}
 			else {
@@ -77,7 +77,7 @@ void truba_type::servise() {
 			cin >> input;
 		}
 
-		if (this->in_servise == 1) input = "y";
+		if (in_servise == 1) input = "y";
 		else input = "n";
 	
 }
@@ -85,9 +85,9 @@ void truba_type::servise() {
 
 void truba_type::save(std::ofstream& fout) {
 
-	fout <<"t"<<"|"<<this->id<<"|" << this->name << "|" << this->length << "|" <<
-		this->diameter << "|" <<this->in_servise << "|" <<endl;
-	cout << "Труба " << this->id << " Успешно Сохранена!" << endl;
+	fout <<"t"<<"|"<<id<<"|" << name << "|" << length << "|" <<
+		diameter << "|" <<in_servise << "|" <<endl;
+	cout << "Труба " << id << " Успешно Сохранена!" << endl;
 
 }
 
@@ -108,25 +108,25 @@ void truba_type::load(std::ifstream& fin, std::string load_string) {
 			else {
 				switch (j) {
 				case 1:
-					this->name = temp_string;
+					name = temp_string;
 					break;
 				
 				case 2:
 					for (int k = 0; k < temp_string.length(); k++) {
 						if (temp_string[k] == '.') temp_string[k] = ',';
 					}
-					this->length = stod(temp_string);
+					length = stod(temp_string);
 					break;
 				case 3:
 					for (int k = 0; k < temp_string.length(); k++) {
 						if (temp_string[k] == '.') temp_string[k] = ',';
 					}
-					this->diameter = stod(temp_string);
+					diameter = stod(temp_string);
 					break;
 
 				case 4:
-					this->in_servise = stoi(temp_string);
-					cout << "Труба " << this->id << " Успешно Загружена!" << endl;
+					in_servise = stoi(temp_string);
+					cout << "Труба " << id << " Успешно Загружена!" << endl;
 					break;
 				}
 

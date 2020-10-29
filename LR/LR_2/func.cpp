@@ -1,4 +1,7 @@
-#include "func.h"
+#include "KS_type.h"
+#include "truba_type.h"
+
+
 using namespace std;
 
 void input_and_check(double& subject, const bool& int_check) {
@@ -75,4 +78,34 @@ void menu() {
 
 }
 
+
+vector<int> pipes_in_service(vector <truba_type> pipes, bool in_service) {
+
+	vector<int> return_vector;
+
+	for (int i = 0; i < pipes.size(); i++) {
+		if (pipes[i].in_servise == in_service) {
+			return_vector.push_back(i);
+		}
+	}
+
+	return return_vector;
+
+}
+
+vector<int> ks_by_eff(vector<KS_type> KS_es, double effectiveness) {
+
+	vector<int> return_vector;
+
+	for (int i = 0; i < KS_es.size(); i++) {
+		if (KS_es[i].effectiveness == effectiveness) {
+			return_vector.push_back(i);
+		}
+	}
+
+	return return_vector;
+
+
+
+}
 

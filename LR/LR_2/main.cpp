@@ -1,10 +1,8 @@
-#include <iostream>
-#include "truba_type.h"
+
 #include "KS_type.h"
-#include <string>
-#include "func.h"
-#include <vector>
-#include <fstream>
+#include "truba_type.h"
+
+
 using namespace std;
 
 
@@ -64,67 +62,61 @@ int main() {
 				break;
 
 			case 4: {
-				cout <<endl<< "Введите id Трубы, которую хотите редактировать "<<endl;
+				cout << "Введите id Трубы, которую хотите редактировать "<<endl;
 				double id_selection;
-				bool id_found = false;
+				
 				input_and_check(id_selection, 1);
-					for (size_t i = 0; i < pipes.size();i++ ) {
-						if (pipes[i].id == id_selection) {
-							id_found = true;
-							cout << "Ви хотите изменить измерения этой трубы или только статуc ремонта?"
-								<<endl<<"Измерения - 1, Статус ремонта - 2"<<endl;
-							while (true) {
-								cin >> temp_string;
-								if (temp_string == "1") {
-									pipes[i].vvod();
-									break;
-								}
-								else if (temp_string == "2") {
-									pipes[i].servise();
-									break;
-								}
-								else {
-									cout << "Введите 1 или 2 "<<endl;
-								}
-							}
+
+				if (id_to_ind(pipes, int(id_selection)) == -1) {
+					cout << "Введите id одной из существующих труб" << endl;
+				}
+				else {
+					cout << "Ви хотите изменить измерения этой трубы или только статуc ремонта?"
+						<< endl << "Измерения - 1, Статус ремонта - 2" << endl;
+					while (true) {
+						cin >> temp_string;
+						if (temp_string == "1") {
+							pipes[id_to_ind(pipes, int(id_selection))].vvod();
 							break;
-						}	
+						}
+						else if (temp_string == "2") {
+							pipes[id_to_ind(pipes, int(id_selection))].servise();
+							break;
+						}
+						else {
+							cout << "Введите 1 или 2 " << endl;
+						}
 					}
-					if (id_found == false) {
-						cout << "Введите один из id cуществующих труб (можно посмотреть командой 3)"<<endl;
-					}
+				}
 			}
 				break;
 			case 5: {
-				cout << endl << "Введите id КС, которую хотите редактировать " << endl;
+				cout << "Введите id КС, которую хотите редактировать " << endl;
 				double id_selection;
-				bool id_found = false;
-				cin >> id_selection;
-					for (size_t i = 0; i < KS_es.size(); i++) {
-						if (KS_es[i].id == id_selection) {
-							id_found = true;
-							cout << "Ви хотите изменить все параметры этой КС или только количество работающих цехов? " 
-								<< endl <<"Все - 1, Кол-во цехов - 2"<<endl;
-							while (true) {
-								cin >> temp_string;
-								if (temp_string == "1") {
-									KS_es[i].vvod();
-									break;
-								}
-								else if (temp_string == "2") {
-									KS_es[i].number_working();
-									break;
-								}
-								else {
-									cout << "Введите 1 или 2 "<<endl;
-								}
-							}
+
+				input_and_check(id_selection, 1);
+
+				if (id_to_ind(KS_es, int(id_selection)) == -1) {
+					cout << "Введите id одной из существующих КС" << endl;
+				}
+				else {
+					cout << "Ви хотите изменить измерения этой КС или только количетсво работающих цехов?"
+						<< endl << "Измерения - 1, Количетсво работающих цехов - 2" << endl;
+					while (true) {
+						cin >> temp_string;
+						if (temp_string == "1") {
+							KS_es[id_to_ind(KS_es, int(id_selection))].vvod();
 							break;
 						}
+						else if (temp_string == "2") {
+							KS_es[id_to_ind(KS_es, int(id_selection))].number_working();
+							break;
+						}
+						else {
+							cout << "Введите 1 или 2 " << endl;
+						}
 					}
-					if (id_found == false) {
-						cout << "Введите один из id cуществующих КС (можно посмотреть командой 3)" << endl;
-					}
+				}
 			}
 				break;
 
@@ -209,7 +201,7 @@ int main() {
 
 			case 8: {
 
-				vector<size_t> found;
+				vector<int> found;
 				bool are_there_any = false; //для определения нашли ли мы хоть что то 
 				cout << "Выберите вариант фильтрации: " << endl<<
 					"1 - Вывод по признаку в ремонете"<< endl<< "2 - Вывод по названию трубы "<<endl
@@ -222,26 +214,32 @@ int main() {
 						switch (int(selection)) {
 						
 						case 1: {
+							vector<int> service_checked;
 
 							cout << "В ремонте ли труба? (y/n)" << endl;
+
 							while (true) {
 								cin >> str_selection;
 								if (str_selection == "y") {
-									for (auto i : pipes) {
-										if (i.in_servise == true) {
-											found.push_back(i.id);
-											i.vivod();
-											are_there_any = true;
+
+									service_checked = pipes_in_service(pipes, 1);
+									if (service_checked.size() != 0) {
+										are_there_any = true;
+										for (auto i : service_checked) {
+											found.push_back(i);
+											pipes[i].vivod();
 										}
 									}
+									
 									break;
 								}
-								else if (str_selection == "n") {
-									for (auto i : pipes) {
-										if (i.in_servise == false) {
-											found.push_back(i.id);
-											i.vivod();
-											are_there_any = true;
+								else if (str_selection == "n") {	
+									service_checked = pipes_in_service(pipes, 0);
+									if (service_checked.size() != 0) {
+										are_there_any = true;
+										for (auto i : service_checked) {
+											found.push_back(i);
+											pipes[i].vivod();
 										}
 									}
 									break;
@@ -262,32 +260,40 @@ int main() {
 
 							cout << "Введите название Трубы, которую необходимо вывести " << endl;
 							string name_selection;
-							bool id_found = false;
 							cin >> name_selection;
-							for (size_t i = 0; i < pipes.size(); i++) {
-								if (pipes[i].name == name_selection) {
-									id_found = true;
-									found.push_back(i);
+
+							vector<int> names = name_to_ind(pipes, name_selection);
+							if (names.size() > 0) {
+								are_there_any = true;
+								for (auto i : names) {
 									pipes[i].vivod();
-									are_there_any = true;
+									found.push_back(i);
 								}
 							}
-							if (id_found == false) {
+							else {
 								cout << "Введите одно из названий cуществующих Труб (можно посмотреть командой 3)" << endl;
 							}
-
-
 							if (are_there_any == false) {
 								cout << "Не найден ни один объект по заданным параметрам" << endl;
 							}
 						}
 							  break;
 						case 3: {
+							cout << "Введите название Трубы, которую необходимо вывести " << endl;
+							string name_selection;
+							cin >> name_selection;
+
+							vector<int> names = name_to_ind(pipes, name_selection);
+							if (names.size() == 0) {
+								cout << "Введите одно из названий cуществующих Труб (можно посмотреть командой 3)" << endl;
+								break;
+							}
+
 							cout << "В ремонте ли труба? (y/n)" << endl;
 							str_selection = "";
 							bool service;
 							while (true) {
-								cin >> selection;
+								cin >> str_selection;
 								if (str_selection != "y" && str_selection != "n") {
 									cout << "Введите y или n" << endl;
 									continue;
@@ -303,33 +309,13 @@ int main() {
 								}
 							}
 
-							cout << "Введите название Трубы, которую необходимо вывести " << endl;
-							
-							string name_selection;
-							bool id_found = false;
-							string name;
-							
-							cin >> name_selection;
-							for (size_t i = 0; i < pipes.size(); i++) {
-								if (pipes[i].name == name_selection) {
-									id_found = true;
-									name = pipes[i].name;
+							for (auto i : names) {
+								if (pipes[i].in_servise == service) {
+										found.push_back(i);
+										pipes[i].vivod();
+										are_there_any = true;
 								}
 							}
-							if (id_found == false) {
-								cout << "Введите одино из названий cуществующих Труб (можно посмотреть командой 3)" << endl;
-								break;
-							}
-
-							for (size_t i = 0; i < pipes.size(); i++) {
-							 
-								if (pipes[i].name == name && pipes[i].in_servise == service) {
-									found.push_back(i);
-									pipes[i].vivod();
-									are_there_any = true;
-								}
-							}
-
 
 							if (are_there_any == false) {
 								cout << "Не найден ни один объект по заданным параметрам"<<endl;
@@ -348,37 +334,30 @@ int main() {
 						}
 						if (are_there_any == true) {
 							cout << "Хотите редактировать найденные трубы? (y/n)" << endl;
-							size_t t = 0;
 							while (true) {
 								cin >> str_selection;
 								if (str_selection == "y") {
-									while (t < found.size()) {
-										for (size_t i = 0; i < pipes.size(); i++) {
-											if (pipes[i].id == found[t]) {
-												t++;
-												cout << "Ви хотите изменить измерения трубы " << t - 1 << " или только статуc ремонта?"
-													<< endl << "Измерения - 1, Статус ремонта - 2" << endl;
-												while (true) {
-													cin >> temp_string;
-													if (temp_string == "1") {
-														pipes[i].vvod();
-	
-														break;
-													}
-													else if (temp_string == "2") {
-														pipes[i].servise();
-														
-														break;
-													}
-													else {
-														cout << "Введите 1 или 2 " << endl;
-													}
-												}
+									for (auto i : found) {
+										cout << "Ви хотите изменить измерения трубы " << i << " или только статуc ремонта?"
+											<< endl << "Измерения - 1, Статус ремонта - 2" << endl;
+										while (true) {
+											cin >> temp_string;
+											if (temp_string == "1") {
+												pipes[i].vvod();
 												break;
+
+											}
+											else if (temp_string == "2") {
+												pipes[i].servise();
+												break;
+												
+											}
+											else {
+												cout << "Введите 1 или 2 " << endl;
+												continue;
 											}
 										}
 									}
-									t = 0;
 									break;
 								}
 								else if (str_selection == "n") {
@@ -412,18 +391,19 @@ int main() {
 						switch (int(selection)) {
 
 						case 1: {
-
+							vector<int> eff_checked;
 							cout << "Введите эффективность КС" << endl;
 							double effectiveness;
 
 							while (true) {
 								input_and_check(effectiveness);
 									if (effectiveness > 0 && effectiveness < 1) {
-										for (auto i : KS_es) {
-											if (i.effectiveness == effectiveness) {
-												found.push_back(i.id);
-												i.vivod();
-												are_there_any = true;
+										eff_checked = ks_by_eff(KS_es, effectiveness);
+										if (eff_checked.size() > 0) {
+											are_there_any = true;
+											for (auto i : eff_checked) {
+												found.push_back(i);
+												KS_es[i].vivod();
 											}
 										}
 										break;
@@ -444,26 +424,36 @@ int main() {
 
 							cout << "Введите название КС, которую необходимо вывести " << endl;
 							string name_selection;
-							bool id_found = false;
 							cin >> name_selection;
-							for (size_t i = 0; i < KS_es.size(); i++) {
-								if (KS_es[i].name == name_selection) {
-									id_found = true;
-									found.push_back(i);
+
+							vector<int> names = name_to_ind(KS_es, name_selection);
+							if (names.size() > 0) {
+								are_there_any = true;
+								for (auto i : names) {
 									KS_es[i].vivod();
-									are_there_any = true;
+									found.push_back(i);
 								}
 							}
-							if (id_found == false) {
-								cout << "Введите одино из названий cуществующих КС (можно посмотреть командой 3)" << endl;
+							else {
+								cout << "Введите одно из названий cуществующих КC (можно посмотреть командой 3)" << endl;
 							}
-							
 							if (are_there_any == false) {
 								cout << "Не найден ни один объект по заданным параметрам" << endl;
 							}
 						}
 							  break;
 						case 3: {
+							
+							cout << "Введите название КС, которую необходимо вывести " << endl;
+							string name_selection;
+							cin >> name_selection;
+
+							vector<int> names = name_to_ind(KS_es, name_selection);
+							if (names.size() == 0) {
+								cout << "Введите одно из названий cуществующих КС (можно посмотреть командой 3)" << endl;
+								break;
+							}
+							
 							
 							double effectiveness;
 							cout << "Введите эффективность КС" << endl;
@@ -481,27 +471,9 @@ int main() {
 
 							}
 
-							cout << "Введите название КС, которую необходимо вывести " << endl;
 
-							string name_selection;
-							bool id_found = false;
-							string name;
-
-							cin >> name_selection;
-							for (size_t i = 0; i < KS_es.size(); i++) {
-								if (KS_es[i].name == name_selection) {
-									id_found = true;
-									name = KS_es[i].name;
-								}
-							}
-							if (id_found == false) {
-								cout << "Введите одино из названий cуществующих КС (можно посмотреть командой 3)" << endl;
-								break;
-							}
-
-							for (size_t i = 0; i < KS_es.size(); i++) {
-
-								if (KS_es[i].name == name && KS_es[i].effectiveness == effectiveness) {
+							for (auto i: names) {
+								if (KS_es[i].effectiveness == effectiveness) {
 									found.push_back(i);
 									KS_es[i].vivod();
 									are_there_any = true;
@@ -526,37 +498,30 @@ int main() {
 						}
 						if (are_there_any == true) {
 							cout << "Хотите редактировать найденные КС? (y/n)" << endl;
-							size_t t = 0;
 							while (true) {
 								cin >> str_selection;
 								if (str_selection == "y") {
-									while (t < found.size()) {
-										for (size_t i = 0; i < KS_es.size(); i++) {
-											if (KS_es[i].id == found[t]) {
-												t++;
-												cout << "Ви хотите изменить измерения КС " << t - 1 << " или только число работающих цехов?"
-													<< endl << "Измерения - 1, Кол-во цехов - 2" << endl;
-												while (true) {
-													cin >> temp_string;
-													if (temp_string == "1") {
-														KS_es[i].vvod();
-														
-														break;
-													}
-													else if (temp_string == "2") {
-														KS_es[i].number_working();
-														
-														break;
-													}
-													else {
-														cout << "Введите 1 или 2 " << endl;
-													}
-												}
+									for (auto i : found) {
+										cout << "Ви хотите изменить измерения КС " << i << " или только число работающих цехов?"
+											<< endl << "Измерения - 1, Число раб. цехов - 2" << endl;
+										while (true) {
+											cin >> temp_string;
+											if (temp_string == "1") {
+												KS_es[i].vvod();
 												break;
+
+											}
+											else if (temp_string == "2") {
+												KS_es[i].number_working();
+												break;
+
+											}
+											else {
+												cout << "Введите 1 или 2 " << endl;
+												continue;
 											}
 										}
 									}
-									t = 0;
 									break;
 								}
 								else if (str_selection == "n") {
@@ -566,9 +531,6 @@ int main() {
 								else {
 									cout << "Введите y или n" << endl;
 								}
-
-
-
 							}
 						}
 					break;
@@ -582,21 +544,21 @@ int main() {
 				if (pipes.size() > 0) {
 					cout << endl << "Введите id Трубы, которую хотите удалить " << endl;
 					double id_selection;
-					bool id_found = false;
+
+						input_and_check(id_selection, 1);
+
+						if (id_to_ind(pipes, int(id_selection)) != -1) {
+							
+							pipes.erase(pipes.begin() + id_to_ind(pipes, int(id_selection)));
+
+							cout << "Труба " << id_selection << " Успешно удалена " << endl;
+							break;
+						}
+						else {
+							cout << "Введите id одной из чуществующих труб (Можно посмотреть коммандо 3)" << endl;
+						}
 					
-					input_and_check(id_selection);
-						for (size_t i = 0; i < pipes.size(); i++) {
-							if (pipes[i].id == id_selection) {
-								int temp_id = pipes[i].id;
-								id_found = true;
-								pipes.erase(pipes.begin() + i);
-								cout << "Труба " << temp_id << " Успешно удалена " << endl;
-								break;
-							}
-						}
-						if (id_found == false) {
-							cout << "Введите один из id cуществующих труб (можно посмотреть командой 3)" << endl;
-						}
+						
 				}
 				else {
 					cout << "На данный момент нет ни одной трубы" << endl;
@@ -607,32 +569,28 @@ int main() {
 
 
 			case 11: {
+				
 				if (KS_es.size() > 0) {
 					cout << endl << "Введите id КС, которую хотите удалить " << endl;
 					double id_selection;
-					bool id_found = false;
 
-					input_and_check(id_selection);
+					input_and_check(id_selection, 1);
 
-						for (size_t i = 0; i < KS_es.size(); i++) {
-							if (KS_es[i].id == id_selection) {
-								
-								int temp_id = KS_es[i].id;
-								id_found = true;
-								KS_es.erase(KS_es.begin() + i);
-								cout << "КС " << temp_id << " Успешно удалена " << endl;
-								break;
-	                            
+					if (id_to_ind(KS_es, int(id_selection)) != -1) {
+						
+						KS_es.erase(KS_es.begin() + id_to_ind(KS_es, int(id_selection)));
 
-							}
-						}
-						if (id_found == false) {
-							cout << "Введите один из id cуществующих КС (можно посмотреть командой 3)" << endl;
-						}
+						cout << "КС " << id_selection << " Успешно удалена " << endl;
+						break;
+					}
+					else {
+						cout << "Введите id одной из чуществующих КС (Можно посмотреть коммандо 3)" << endl;
+					}
+
 
 				}
 				else {
-					cout << "На данный момент в оперативной памяти нет ни одной КС" << endl;
+					cout << "На данный момент нет ни одной КС" << endl;
 				}
 			}
 				  break;

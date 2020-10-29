@@ -18,13 +18,13 @@ void KS_type::vvod() {
 
 	cout << "Введите название КС" << endl;
 	name_check(name_input);
-	this->name = name_input;
+	name = name_input;
     
 
 	cout << "Введите число цехов КС" << endl;
 
 	input_and_check(input, 1);
-	this->workshop_number = input;
+	workshop_number = input;
 
 	
 	cout << "Введите число работающих цехов КС (<= числа цехов)" << endl;
@@ -32,8 +32,8 @@ void KS_type::vvod() {
 	while (true) {
 		input_and_check(input, 1);
 
-		if (input <= this->workshop_number) {
-			this->working_workshops = input;
+		if (input <= workshop_number) {
+			working_workshops = input;
 			break;
 		}
 		else {
@@ -43,7 +43,7 @@ void KS_type::vvod() {
 	}
 	
 	
-	this->effectiveness = int((double(this->working_workshops) / double(this->workshop_number)) * 100 + 0.5) / 100.0;
+	effectiveness = int((double(working_workshops) / double(workshop_number)) * 100 + 0.5) / 100.0;
 	
 
 
@@ -52,17 +52,17 @@ void KS_type::vvod() {
 }
 
 void KS_type::vivod() {
-		cout << endl << "Параметры КС " << this->id << endl;
+		cout << endl << "Параметры КС " << id << endl;
 
-		cout << "Id КС : " << this->id << endl;
+		cout << "Id КС : " << id << endl;
 
-		cout << "Название КС: " << this->name << endl;
+		cout << "Название КС: " << name << endl;
 
-		cout << "Число цехов КС: " << this->workshop_number << endl;
+		cout << "Число цехов КС: " << workshop_number << endl;
 
-		cout << "Число работающих цехов КС: " << this->working_workshops << endl;
+		cout << "Число работающих цехов КС: " << working_workshops << endl;
 
-		cout << "Эффективность КС : " << this->effectiveness << endl;
+		cout << "Эффективность КС : " << effectiveness << endl;
 }
 //изменение кол-ва рабочих цехов
 void KS_type::number_working() {    
@@ -72,8 +72,8 @@ void KS_type::number_working() {
 	while (true) {
 		input_and_check(ammount, 1);
 		
-			if((this->working_workshops+ammount)<=this->workshop_number 
-				&& (this->working_workshops + ammount) >= 0) this->working_workshops = this->working_workshops+ammount;
+			if((working_workshops+ammount)<=workshop_number 
+				&& (working_workshops + ammount) >= 0) working_workshops = working_workshops+ammount;
 			else {
 				cout << "Введите возможное число изменяемых цехов";
 				continue;
@@ -82,7 +82,7 @@ void KS_type::number_working() {
 		
 	}
 
-	cout << "Число работающих цехов на данный момент :" << this->working_workshops << endl;
+	cout << "Число работающих цехов на данный момент :" << working_workshops << endl;
 
 
 
@@ -92,9 +92,9 @@ void KS_type::number_working() {
 //сохранение в файл
 void KS_type::save(std::ofstream& fout) {
 
-	fout << "k" << "|"<< this->id << "|" << this->name << "|" <<
-		this->workshop_number << "|" << this->working_workshops <<"|"<< this->effectiveness << "|"<<endl;
-	cout << "КС " << this->id << " Успешно Сохранена!" << endl;
+	fout << "k" << "|"<< id << "|" << name << "|" <<
+		workshop_number << "|" << working_workshops <<"|"<< effectiveness << "|"<<endl;
+	cout << "КС " << id << " Успешно Сохранена!" << endl;
 }
 //загрузка из файла
 void KS_type::load(std::ifstream& fin, std::string load_string) {
@@ -115,22 +115,22 @@ void KS_type::load(std::ifstream& fin, std::string load_string) {
 			switch (j) {
 
 			case 1:
-				this->name = temp_string;
+				name = temp_string;
 				break;
 			case 2:
-				this->workshop_number = stoi(temp_string);
+				workshop_number = stoi(temp_string);
 				break;
 
 			case 3:
-				this->working_workshops = stoi(temp_string);
+				working_workshops = stoi(temp_string);
 				break;
 
 			case 4:
 				for (int k = 0; k < temp_string.length(); k++) {
 					if (temp_string[k] == '.') temp_string[k] = ',';
 				}
-				this->effectiveness = stod(temp_string);
-				cout << "КС " << this->id << " Успешно Загружена!" << endl;
+				effectiveness = stod(temp_string);
+				cout << "КС " << id << " Успешно Загружена!" << endl;
 				break;
 			}
 
