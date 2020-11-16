@@ -3,7 +3,7 @@
 
 using namespace std;
 
-vector<int> find_by_parameter(vector<truba_type>& pipes) {
+vector<int> find_by_parameter(vector<truba_type>& pipes, const bool& output) {
 	
 	cout << "В ремонте ли труба? (y/n)" << endl;
 	vector<int> found;
@@ -15,7 +15,7 @@ vector<int> find_by_parameter(vector<truba_type>& pipes) {
 			  found = pipes_in_service(pipes, true);
 			if (found.size() != 0) {
 				for (auto i : found) {
-					pipes[i].vivod();
+					if (output) pipes[i].vivod();
 				}
 			}
 			break;
@@ -25,7 +25,7 @@ vector<int> find_by_parameter(vector<truba_type>& pipes) {
 			if (found.size() != 0) {
 
 				for (auto i : found) {
-					pipes[i].vivod();
+					if (output) pipes[i].vivod();
 				}
 			}
 			break;
@@ -37,13 +37,13 @@ vector<int> find_by_parameter(vector<truba_type>& pipes) {
 	}
 
 	if (found.size() == 0) {
-		cout << "Не найден ни один объект по заданным параметрам" << endl;
+		if (output) cout << "Не найден ни один объект по заданным параметрам" << endl;
 	}
 
 	return found;
 }
 
-vector<int> find_by_parameter(vector<KS_type>& KS_es) {
+vector<int> find_by_parameter(vector<KS_type>& KS_es, const bool& output) {
 
 	cout << "Введите эффективность КС" << endl;
 	double effectiveness;
@@ -56,7 +56,7 @@ vector<int> find_by_parameter(vector<KS_type>& KS_es) {
 			found = ks_by_eff(KS_es, effectiveness);
 			if (found.size() > 0) {
 				for (auto i : found) {
-					KS_es[i].vivod();
+					if (output) KS_es[i].vivod();
 				}
 			}
 			break;
@@ -68,7 +68,7 @@ vector<int> find_by_parameter(vector<KS_type>& KS_es) {
 	}
 
 	if (found.size() == 0) {
-		cout << "Не найден ни один объект по заданным параметрам" << endl;
+		if (output) cout << "Не найден ни один объект по заданным параметрам" << endl;
 	}
 
 	return found;
@@ -258,7 +258,6 @@ void menu() {
 							<< endl << "10 - Удаление Трубы" << endl << "11 - Удаление КС" << endl << "0 - Выйти" << endl <<"Ввод : ";
 
 }
-
 
 vector<int> pipes_in_service(vector <truba_type> pipes, bool in_service) {
 
