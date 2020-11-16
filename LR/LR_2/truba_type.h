@@ -10,8 +10,9 @@ class truba_type
 public:	
 	
 
-	//id
+	//статические параметры
 	static int sId;
+
 
 	//параметры
 	int id;
@@ -19,6 +20,7 @@ public:
 	double length;
 	double diameter;
 	bool in_servise = false;
+	
 
 	//методы
 	void vvod();

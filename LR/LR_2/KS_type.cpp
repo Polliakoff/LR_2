@@ -3,6 +3,7 @@ using namespace std;
 
 int KS_type::sId = 0;
 
+
 KS_type::KS_type() :id(sId++) {
 
 }
@@ -15,9 +16,7 @@ void KS_type::vvod() {
 
 	cout << endl << "Введите параметры для КС:" << endl;
 
-
-	cout << "Введите название КС" << endl;
-	name_check(name_input);
+	input_and_check(name_input, "название КС");
 	name = name_input;
     
 
@@ -113,7 +112,9 @@ void KS_type::load(std::ifstream& fin, std::string load_string) {
 		}
 		else {
 			switch (j) {
-
+			case 0:
+				id = stoi(temp_string);
+				break;
 			case 1:
 				name = temp_string;
 				break;

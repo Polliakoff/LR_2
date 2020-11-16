@@ -4,6 +4,7 @@ using namespace std;
 
 int truba_type::sId = 0;
 
+
 truba_type::truba_type():id(sId++) {
 
 }
@@ -16,8 +17,7 @@ void truba_type::vvod() {
 
 	cout << endl << "¬ведите параметры дл€ “рубы:" << endl;
 
-	cout << "¬ведите название трубы" << endl;
-	name_check(name_input);
+	input_and_check(name_input, "название трубы");
 	name = name_input;
 
 	cout << "¬ведите длину трубы" << endl;
@@ -107,6 +107,10 @@ void truba_type::load(std::ifstream& fin, std::string load_string) {
 			}
 			else {
 				switch (j) {
+				case 0:
+					id = stoi(temp_string);
+					break;
+				
 				case 1:
 					name = temp_string;
 					break;
@@ -136,7 +140,6 @@ void truba_type::load(std::ifstream& fin, std::string load_string) {
 			
 			if (i + 1 < load_string.length())i++;
 			else return;
-		
 		}
 		else {
 			if (i + 1 < load_string.length())i++;

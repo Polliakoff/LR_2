@@ -11,7 +11,7 @@ class KS_type
 public:
 
 
-	//id
+	//статические параметры
 
 	static int sId;
 
@@ -21,6 +21,7 @@ public:
 	int workshop_number;
 	int working_workshops;
 	double effectiveness=0;
+	
 
 	//методы	
 	void vvod();
