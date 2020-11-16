@@ -96,6 +96,7 @@ template <typename T> vector<int> find_by_filter(vector<T>& objects) {
 		for (auto j : found_2) {
 			if (i == j) {
 				found.push_back(i);
+				objects[i].vivod();
 			}
 		}
 	}
@@ -103,12 +104,6 @@ template <typename T> vector<int> find_by_filter(vector<T>& objects) {
 	if (found.size() == 0) {
 		cout << "Не найден ни один объект по заданным параметрам" << endl;
 	}
-	else {
-		for (auto k : found) {
-			objects[k].vivod();
-		}
-	}
-	
 
 	return found;
 }
