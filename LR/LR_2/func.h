@@ -5,6 +5,7 @@
 #include <vector>
 #include <fstream>
 #include <limits>
+#include <map>
 
 using namespace std;
 
@@ -13,38 +14,42 @@ class KS_type;
 
 
 void menu();
-void save_all(const vector<truba_type>& pipes, const vector<KS_type>& KS_es);
-void load_all(vector<truba_type>& pipes, vector<KS_type>& KS_es);
+void save_all(const map<int, truba_type>& pipes, const map<int, KS_type>& KS_es);
+void load_all(map<int, truba_type>& pipes, map<int, KS_type>& KS_es);
 void input_and_check(double& subject, const bool& int_check = 0);
 void input_and_check(std::string& subject, const std::string& name);
-void edit_by_id(vector<truba_type>& pipes);
-void edit_by_id(vector<KS_type>& KS_es);
-vector<int> find_by_parameter(vector<truba_type>& pipes, const bool& output = 1);
-vector<int> find_by_parameter(vector<KS_type>& KS_es, const bool& output = 1);
-void package_edit(vector<int>& found, vector<truba_type>& pipes);
-void package_edit(vector<int>& found, vector<KS_type>& KS_es);
-vector<int> pipes_in_service(vector <truba_type> pipes, bool in_service);
-vector<int> ks_by_eff(vector<KS_type> KS_es, double effectiveness);
+void edit_by_id(map<int, truba_type>& pipes);
+void edit_by_id(map<int, KS_type>& KS_es);
+vector<int> find_by_parameter(map<int, truba_type>& pipes, const bool& output = 1);
+vector<int> find_by_parameter(map<int,KS_type>& KS_es, const bool& output = 1);
+void package_edit(vector<int>& found, map<int,truba_type>& pipes);
+void package_edit(vector<int>& found, map<int, KS_type>& KS_es);
+vector<int> pipes_in_service(map <int, truba_type> pipes, bool in_service);
+vector<int> ks_by_eff(map<int, KS_type> KS_es, double effectiveness);
 
-template <typename T> int id_to_ind(vector<T> objects, int id)
+template <typename T> int id_search(map<int, T> objects, int id)
 {
 
-	for (int i = 0; i < objects.size(); i++) {
-		if (objects[i].id == id) {
-			return i;
-		}
+	if (objects.size() > 0) {
+		for (auto i : objects) {
+			i.first == id;
+			return 0;
+		}	
+		return -1;
+	}
+	else {
+		return -1;
 	}
 
-	return -1;
 }
 
-template <typename T> vector<int> name_to_ind(vector<T> objects, std::string name)
+template <typename T> vector<int> name_to_id(map<int,T> objects, std::string name)
 {
 	vector<int> return_vector;
 
-	for (int i = 0; i < objects.size(); i++) {
-		if (objects[i].name == name) {
-			return_vector.push_back(i);
+	for (auto i: objects) {
+		if (i.second.name == name) {
+			return_vector.push_back(i.first);
 		}
 	}
 
@@ -52,11 +57,11 @@ template <typename T> vector<int> name_to_ind(vector<T> objects, std::string nam
 
 }
 
-template <typename T> void vivod_vsego(vector<T>& objects, std::string class_name)
+template <typename T> void vivod_vsego(map<int , T>& objects, std::string class_name)
 {
 	if (objects.size() > 0) {
 		for (auto i : objects) {
-			i.vivod();
+			i.second.vivod();
 		}
 	}
 	else {
@@ -66,11 +71,11 @@ template <typename T> void vivod_vsego(vector<T>& objects, std::string class_nam
 }
 
 
-template <typename T> vector<int> find_by_name(vector<T>& objects, const bool& output = 1) {
+template <typename T> vector<int> find_by_name(map<int,T>& objects, const bool& output = 1) {
 	string name_selection;
 	input_and_check(name_selection, "название, по которому будет произведен поиск");
 
-	vector <int>found = name_to_ind(objects, name_selection);
+	vector <int> found = name_to_id(objects, name_selection);
 	if (found.size() > 0) {
 		for (auto i : found) {
 			if (output) objects[i].vivod();
@@ -86,7 +91,7 @@ template <typename T> vector<int> find_by_name(vector<T>& objects, const bool& o
 	return found;
 }
 
-template <typename T> vector<int> find_by_filter(vector<T>& objects) {
+template <typename T> vector<int> find_by_filter(map<int,T>& objects) {
 
 	vector<int> found_1 = find_by_name(objects,0);
 	vector<int> found_2 = find_by_parameter(objects,0);
@@ -108,7 +113,7 @@ template <typename T> vector<int> find_by_filter(vector<T>& objects) {
 	return found;
 }
 
-template <typename T> void switch_search(vector<T>& objects) {
+template <typename T> void switch_search(map<int,T>& objects) {
 	
 	vector<int> found;
 	double selection;
@@ -145,7 +150,7 @@ template <typename T> void switch_search(vector<T>& objects) {
 	}
 }
 
-template <typename T> void delete_object(vector<T>& objects, string name) {
+template <typename T> void delete_object(map<int,T>& objects, string name) {
 	
 	if (objects.size() > 0) {
 		cout << endl << "Введите id Объекта, который хотите удалить " << endl;
@@ -153,9 +158,9 @@ template <typename T> void delete_object(vector<T>& objects, string name) {
 
 		input_and_check(id_selection, 1);
 
-		if (id_to_ind(objects, int(id_selection)) != -1) {
+		if (id_search(objects, int(id_selection)) != -1) {
 
-			objects.erase(objects.begin() + id_to_ind(objects, int(id_selection)));
+			objects.erase(int(id_selection));
 
 			cout << name << id_selection << " Успешно удалена " << endl;
 		}

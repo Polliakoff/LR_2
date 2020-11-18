@@ -3,7 +3,7 @@
 
 using namespace std;
 
-vector<int> find_by_parameter(vector<truba_type>& pipes, const bool& output) {
+vector<int> find_by_parameter(map<int,truba_type>& pipes, const bool& output) {
 	
 	cout << "В ремонте ли труба? (y/n)" << endl;
 	vector<int> found;
@@ -43,7 +43,7 @@ vector<int> find_by_parameter(vector<truba_type>& pipes, const bool& output) {
 	return found;
 }
 
-vector<int> find_by_parameter(vector<KS_type>& KS_es, const bool& output) {
+vector<int> find_by_parameter(map<int, KS_type>& KS_es, const bool& output) {
 
 	cout << "Введите эффективность КС" << endl;
 	double effectiveness;
@@ -74,7 +74,7 @@ vector<int> find_by_parameter(vector<KS_type>& KS_es, const bool& output) {
 	return found;
 }
 
-void package_edit(vector<int>& found, vector<truba_type>& pipes) {
+void package_edit(vector<int>& found, map<int,truba_type>& pipes) {
 	
 	if (found.size() != 0) {
 		cout << "Хотите редактировать найденные трубы? (y/n)" << endl;
@@ -98,7 +98,7 @@ void package_edit(vector<int>& found, vector<truba_type>& pipes) {
 	}
 }
 
-void package_edit(vector<int>& found, vector<KS_type>& KS_es){
+void package_edit(vector<int>& found, map<int,KS_type>& KS_es){
 
 	if (found.size() != 0) {
 		cout << "Хотите редактировать найденные трубы? (y/n)" << endl;
@@ -122,38 +122,38 @@ void package_edit(vector<int>& found, vector<KS_type>& KS_es){
 	}
 }
 
-void edit_by_id(vector<truba_type>& pipes){
+void edit_by_id(map<int, truba_type>& pipes){
 	
 	cout << "Введите id Трубы, которую хотите редактировать " << endl;
 	double id_selection;
 
 	input_and_check(id_selection, 1);
 
-	if (id_to_ind(pipes, int(id_selection)) == -1) {
+	if (id_search(pipes, int(id_selection)) == -1) {
 		cout << "Введите id одной из существующих труб" << endl;
 	}
 	else {
-		pipes[id_to_ind(pipes, int(id_selection))].servise();
+		pipes[id_selection].servise();
 		}
 }
 
-void edit_by_id(vector<KS_type>& KS_es) {
+void edit_by_id(map<int, KS_type>& KS_es) {
 
 	cout << "Введите id КС, которую хотите редактировать " << endl;
 	double id_selection;
 
 	input_and_check(id_selection, 1);
 
-	if (id_to_ind(KS_es, int(id_selection)) == -1) {
+	if (id_search(KS_es, int(id_selection)) == -1) {
 		cout << "Введите id одной из существующих КС" << endl;
 	}
 	else {
-		KS_es[id_to_ind(KS_es, int(id_selection))].number_working();
+		KS_es[id_search(KS_es, int(id_selection))].number_working();
 	}
 }
 
 
-void save_all(const vector<truba_type>& pipes, const vector<KS_type>& KS_es) {
+void save_all(const map<int,truba_type>& pipes, const map<int,KS_type>& KS_es) {
 	
 	ofstream fout;
 	string filename;
@@ -167,11 +167,11 @@ void save_all(const vector<truba_type>& pipes, const vector<KS_type>& KS_es) {
 	if (fout.is_open()) {
 
 		for (auto i : pipes) {
-			i.save(fout);
+			i.second.save(fout);
 		}
 
 		for (auto i : KS_es) {
-			i.save(fout);
+			i.second.save(fout);
 		}
 	}
 	else {
@@ -181,7 +181,7 @@ void save_all(const vector<truba_type>& pipes, const vector<KS_type>& KS_es) {
 	fout.close();
 }
 
-void load_all(vector<truba_type>& pipes, vector<KS_type>& KS_es) {
+void load_all(map<int,truba_type>& pipes, map<int, KS_type>& KS_es) {
 	ifstream fin;//создание потока вывода из файла
 	string filename;
 	cout << "Введите название файла загрузки " << endl;
@@ -207,13 +207,13 @@ void load_all(vector<truba_type>& pipes, vector<KS_type>& KS_es) {
 			truba_type temp_truba;
 			temp_truba.load(fin, temp_string);
 			if (temp_truba.id > max_pipe_id) max_pipe_id = temp_truba.id;
-			pipes.push_back(temp_truba);
+			pipes.emplace(temp_truba.id, temp_truba);
 		}
 		else {
 			KS_type temp_KS;
 			temp_KS.load(fin, temp_string);
 			if (temp_KS.id > max_KS_id) max_KS_id = temp_KS.id;
-			KS_es.push_back(temp_KS);
+			KS_es.emplace(temp_KS.id, temp_KS);
 		}
 	}
 
@@ -259,13 +259,13 @@ void menu() {
 
 }
 
-vector<int> pipes_in_service(vector <truba_type> pipes, bool in_service) {
+vector<int> pipes_in_service(map <int,truba_type> pipes, bool in_service) {
 
 	vector<int> return_vector;
 
-	for (int i = 0; i < pipes.size(); i++) {
-		if (pipes[i].in_servise == in_service) {
-			return_vector.push_back(i);
+	for (auto i:pipes) {
+		if (i.second.in_servise == in_service) {
+			return_vector.push_back(i.first);
 		}
 	}
 
@@ -273,13 +273,13 @@ vector<int> pipes_in_service(vector <truba_type> pipes, bool in_service) {
 
 }
 
-vector<int> ks_by_eff(vector<KS_type> KS_es, double effectiveness) {
+vector<int> ks_by_eff(map<int, KS_type> KS_es, double effectiveness) {
 
 	vector<int> return_vector;
 
-	for (int i = 0; i < KS_es.size(); i++) {
-		if (KS_es[i].effectiveness == effectiveness) {
-			return_vector.push_back(i);
+	for (auto i:KS_es) {
+		if (i.second.effectiveness == effectiveness) {
+			return_vector.push_back(i.first);
 		}
 	}
 

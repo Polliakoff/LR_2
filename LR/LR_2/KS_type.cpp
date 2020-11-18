@@ -74,7 +74,7 @@ void KS_type::number_working() {
 			if((working_workshops+ammount)<=workshop_number 
 				&& (working_workshops + ammount) >= 0) working_workshops = working_workshops+ammount;
 			else {
-				cout << "¬ведите возможное число измен€емых цехов";
+				cout << "¬ведите возможное число измен€емых цехов" << endl;
 				continue;
 			}
 			break;
