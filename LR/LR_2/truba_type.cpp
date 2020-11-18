@@ -4,7 +4,6 @@ using namespace std;
 
 int truba_type::sId = 0;
 
-
 truba_type::truba_type():id(sId++) {
 
 }

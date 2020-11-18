@@ -3,7 +3,6 @@ using namespace std;
 
 int KS_type::sId = 0;
 
-
 KS_type::KS_type() :id(sId++) {
 
 }

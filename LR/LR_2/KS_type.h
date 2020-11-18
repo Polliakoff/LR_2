@@ -3,7 +3,6 @@
 
 class KS_type
 {
-
 public:
 
 	//статические параметры

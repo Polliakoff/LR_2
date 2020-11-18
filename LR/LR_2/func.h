@@ -88,7 +88,6 @@ template <typename T> void vivod_vsego(map<int , T>& objects, std::string class_
 
 }
 
-
 template <typename T> vector<int> find_by_name(map<int,T>& objects, const bool& output = 1) {
 	string name_selection;
 	input_and_check(name_selection, "название, по которому будет произведен поиск");
