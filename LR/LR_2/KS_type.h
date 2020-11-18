@@ -19,7 +19,7 @@ public:
 	//методы	
 	void vvod();
 	void vivod();
-	void number_working();
+	void edit();
 	void save(std::ofstream& fout);
 	void load(std::ifstream& fin, std::string load_string);
 	KS_type();

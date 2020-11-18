@@ -17,14 +17,49 @@ void save_all(const map<int, truba_type>& pipes, const map<int, KS_type>& KS_es)
 void load_all(map<int, truba_type>& pipes, map<int, KS_type>& KS_es);
 void input_and_check(double& subject, const bool& int_check = 0);
 void input_and_check(std::string& subject, const std::string& name);
-void edit_by_id(map<int, truba_type>& pipes);
-void edit_by_id(map<int, KS_type>& KS_es);
 vector<int> find_by_parameter(map<int, truba_type>& pipes, const bool& output = 1);
 vector<int> find_by_parameter(map<int,KS_type>& KS_es, const bool& output = 1);
-void package_edit(vector<int>& found, map<int,truba_type>& pipes);
-void package_edit(vector<int>& found, map<int, KS_type>& KS_es);
 vector<int> pipes_in_service(map <int, truba_type> pipes, bool in_service);
 vector<int> ks_by_eff(map<int, KS_type> KS_es, double effectiveness);
+
+template <typename T> void edit_by_id(map<int, T>& objects) {
+
+	cout << "¬ведите id ќбъекта, который хотите редактировать " << endl;
+	double id_selection;
+
+	input_and_check(id_selection, 1);
+
+	if (!(objects.find(int(id_selection)) != objects.end())) {
+		cout << "¬ведите id одного из существующих объектов" << endl;
+	}
+	else {
+		objects[id_selection].edit();
+	}
+}
+
+template <typename T> void package_edit(vector<int>& found, map<int, T>& objects) {
+
+	if (found.size() != 0) {
+		cout << "’отите редактировать найденные ќбъекты? (y/n)" << endl;
+		while (true) {
+			string str_selection;
+			cin >> str_selection;
+			if (str_selection == "y") {
+				for (auto i : found) {
+					objects[i].edit();
+				}
+				break;
+			}
+			else if (str_selection == "n") {
+				found.clear();
+				return;
+			}
+			else {
+				cout << "¬ведите y или n" << endl;
+			}
+		}
+	}
+}
 
 template <typename T> vector<int> name_to_id(map<int,T> objects, std::string name)
 {

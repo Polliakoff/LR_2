@@ -18,7 +18,7 @@ public:
 	//методы
 	void vvod();
 	void vivod();
-	void servise();
+	void edit();
 	void save(std::ofstream& fout);
 	void load(std::ifstream& fin, std::string load_string);
 	truba_type();

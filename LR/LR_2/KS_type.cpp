@@ -58,7 +58,7 @@ void KS_type::vivod() {
 		cout << "Ёффективность  — : " << effectiveness << endl;
 }
 //изменение кол-ва рабочих цехов
-void KS_type::number_working() {    
+void KS_type::edit() {    
 	double ammount = 0;
 	cout << "¬ведите число цехов (меньше нул€ - выключить, больше нул€ - включить)" << endl;
 	

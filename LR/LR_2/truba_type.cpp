@@ -52,7 +52,7 @@ void truba_type::vivod() {
 
 }
 //Изменения статуса в ремонте
-void truba_type::servise() {
+void truba_type::edit() {
 
 	   string input;
 
