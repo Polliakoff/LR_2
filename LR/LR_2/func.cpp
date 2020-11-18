@@ -79,8 +79,7 @@ void save_all(const map<int,truba_type>& pipes, const map<int,KS_type>& KS_es) {
 	ofstream fout;
 	string filename;
 
-	cout << "¬ведите название файла дл€ сохранени€ " << endl;
-	cin >> filename;
+	input_and_check(filename, "название ‘айла");
 
 	//сохранение в файл
 	fout.open(filename + ".clbr");
@@ -105,8 +104,9 @@ void save_all(const map<int,truba_type>& pipes, const map<int,KS_type>& KS_es) {
 void load_all(map<int,truba_type>& pipes, map<int, KS_type>& KS_es) {
 	ifstream fin;//создание потока вывода из файла
 	string filename;
-	cout << "¬ведите название файла загрузки " << endl;
-	cin >> filename;
+	
+	input_and_check(filename, "название ‘айла");
+
 	//сохранение труб в файл
 	fin.open(filename + ".clbr");
 
