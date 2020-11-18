@@ -13,18 +13,15 @@ void KS_type::vvod() {
 	double input;
 	string name_input;
 
-
 	cout << endl << "Введите параметры для КС:" << endl;
 
 	input_and_check(name_input, "название КС");
 	name = name_input;
     
-
 	cout << "Введите число цехов КС" << endl;
 
 	input_and_check(input, 1);
 	workshop_number = input;
-
 	
 	cout << "Введите число работающих цехов КС (<= числа цехов)" << endl;
 
@@ -41,11 +38,8 @@ void KS_type::vvod() {
 		}
 	}
 	
-	
 	effectiveness = int((double(working_workshops) / double(workshop_number)) * 100 + 0.5) / 100.0;
 	
-
-
 	cout << "Ввод парамтеров завершен" << endl;
 
 }
@@ -82,10 +76,6 @@ void KS_type::number_working() {
 	}
 
 	cout << "Число работающих цехов на данный момент :" << working_workshops << endl;
-
-
-
-
 
 }
 //сохранение в файл

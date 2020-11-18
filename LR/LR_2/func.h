@@ -12,7 +12,6 @@ using namespace std;
 class truba_type;
 class KS_type;
 
-
 void menu();
 void save_all(const map<int, truba_type>& pipes, const map<int, KS_type>& KS_es);
 void load_all(map<int, truba_type>& pipes, map<int, KS_type>& KS_es);

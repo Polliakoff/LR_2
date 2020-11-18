@@ -9,7 +9,6 @@ truba_type::truba_type():id(sId++) {
 
 }
 
-
 void truba_type::vvod() {
 	string name_input;
 	double input;
@@ -81,7 +80,6 @@ void truba_type::servise() {
 		else input = "n";
 	
 }
-
 
 void truba_type::save(std::ofstream& fout) {
 
