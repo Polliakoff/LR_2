@@ -8,6 +8,10 @@ truba_type::truba_type():id(sId++) {
 
 }
 
+int truba_type::get_id()const {
+	return id;
+}
+
 void truba_type::vvod() {
 	string name_input;
 	double input;
@@ -30,26 +34,6 @@ void truba_type::vvod() {
 
 }
 
-void truba_type::vivod() {
-
-	cout << endl <<"Параметры Трубы "<<id<< endl;
-
-	cout << "Id трубы : "<< id << endl;
-
-	cout << "Название трубы: " << name << endl;
-
-	cout << "Длина трубы: "<< length << endl;
-
-	cout << "Диаметр трубы: "<< diameter << endl;
-
-	string service_status; //временная строка
-
-	if (in_servise == 1) service_status = "yes";
-	else service_status = "no";
-
-	cout << "В ремонте ли труба (yes/no) : \t "<< service_status << endl;
-
-}
 //Изменения статуса в ремонте
 void truba_type::edit() {
 
@@ -80,14 +64,6 @@ void truba_type::edit() {
 	
 }
 
-void truba_type::save(std::ofstream& fout) {
-
-	fout <<"t"<<"|"<<id<<"|" << name << "|" << length << "|" <<
-		diameter << "|" <<in_servise << "|" <<endl;
-	cout << "Труба " << id << " Успешно Сохранена!" << endl;
-
-}
-
 void truba_type::load(std::ifstream& fin, std::string load_string) {
 	
 	string temp_string; //временная строка
@@ -106,6 +82,7 @@ void truba_type::load(std::ifstream& fin, std::string load_string) {
 				switch (j) {
 				case 0:
 					id = stoi(temp_string);
+					sId = id+1;
 					break;
 				
 				case 1:
@@ -144,6 +121,39 @@ void truba_type::load(std::ifstream& fin, std::string load_string) {
 		}
 		
 	}
-
+	
 }
+
+std::ostream& operator<<(std::ostream& os, const truba_type& t_t) {
+
+
+	os << endl << "Параметры Трубы " << t_t.get_id()<< endl;
+
+	os << "Id трубы : " << t_t.get_id() << endl;
+
+	os << "Название трубы: " << t_t.name << endl;
+
+	os << "Длина трубы: " << t_t.length << endl;
+
+	os << "Диаметр трубы: " << t_t.diameter << endl;
+
+	string service_status; //временная строка
+
+	if (t_t.in_servise == 1) service_status = "yes";
+	else service_status = "no";
+
+	os << "В ремонте ли труба (yes/no) : \t " << service_status << endl;
+
+	return os;
+}
+
+std::ofstream& operator<<(std::ofstream& ofs, const truba_type& t_t) {
+
+	ofs << "t" << "|" << t_t.get_id() << "|" << t_t.name << "|" << t_t.length << "|" <<
+		t_t.diameter << "|" << t_t.in_servise << "|" << endl;
+	cout << "Труба " << t_t.get_id() << " Успешно Сохранена!" << endl;
+
+	return ofs;
+}
+
 

@@ -3,13 +3,12 @@
 
 class truba_type
 {
+private:
+	int id;
+	static int sId;
 public:		
 
-	//статические параметры
-	static int sId;
-
 	//параметры
-	int id;
 	std::string name;
 	double length;
 	double diameter;
@@ -17,11 +16,13 @@ public:
 
 	//методы
 	void vvod();
-	void vivod();
 	void edit();
-	void save(std::ofstream& fout);
+	int get_id() const;
 	void load(std::ifstream& fin, std::string load_string);
 	truba_type();
 
 };
+
+std::ostream& operator<<(std::ostream&, const truba_type&);
+std::ofstream& operator<<(std::ofstream&, const truba_type&);
 

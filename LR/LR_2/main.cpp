@@ -21,14 +21,14 @@ int main() {
 				//создание новой пустой трубы и помещение ее в вектор труб
 				truba_type temp_truba;
 				temp_truba.vvod();
-				pipes.emplace(temp_truba.id,temp_truba);
+				pipes.emplace(temp_truba.get_id(),temp_truba);
 			}
 				  break;
 			case 2: {
 				//создание новой пустой КС и помещение ее в вектор КС
 				KS_type temp_KS;
 				temp_KS.vvod();
-				KS_es.emplace(temp_KS.id, temp_KS);
+				KS_es.emplace(temp_KS.get_id(), temp_KS);
 			}
 				break;
 			case 3: {

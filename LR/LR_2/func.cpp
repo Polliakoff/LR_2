@@ -15,7 +15,7 @@ vector<int> find_by_parameter(map<int,truba_type>& pipes, const bool& output) {
 			  found = pipes_in_service(pipes, true);
 			if (found.size() != 0) {
 				for (auto i : found) {
-					if (output) pipes[i].vivod();
+					if (output) cout<<pipes[i];
 				}
 			}
 			break;
@@ -25,7 +25,7 @@ vector<int> find_by_parameter(map<int,truba_type>& pipes, const bool& output) {
 			if (found.size() != 0) {
 
 				for (auto i : found) {
-					if (output) pipes[i].vivod();
+					if (output) cout<<pipes[i];
 				}
 			}
 			break;
@@ -56,7 +56,7 @@ vector<int> find_by_parameter(map<int, KS_type>& KS_es, const bool& output) {
 			found = ks_by_eff(KS_es, effectiveness);
 			if (found.size() > 0) {
 				for (auto i : found) {
-					if (output) KS_es[i].vivod();
+					if (output) cout<<KS_es[i];
 				}
 			}
 			break;
@@ -88,11 +88,11 @@ void save_all(const map<int,truba_type>& pipes, const map<int,KS_type>& KS_es) {
 	if (fout.is_open()) {
 
 		for (auto i : pipes) {
-			i.second.save(fout);
+			fout<<i.second;
 		}
 
 		for (auto i : KS_es) {
-			i.second.save(fout);
+			fout<<i.second;
 		}
 	}
 	else {
@@ -127,19 +127,16 @@ void load_all(map<int,truba_type>& pipes, map<int, KS_type>& KS_es) {
 		if (temp_string[0] == 't') {
 			truba_type temp_truba;
 			temp_truba.load(fin, temp_string);
-			if (temp_truba.id > max_pipe_id) max_pipe_id = temp_truba.id;
-			pipes.emplace(temp_truba.id, temp_truba);
+			if (temp_truba.get_id() > max_pipe_id) max_pipe_id = temp_truba.get_id();
+			pipes.emplace(temp_truba.get_id(), temp_truba);
 		}
 		else {
 			KS_type temp_KS;
 			temp_KS.load(fin, temp_string);
-			if (temp_KS.id > max_KS_id) max_KS_id = temp_KS.id;
-			KS_es.emplace(temp_KS.id, temp_KS);
+			if (temp_KS.get_id() > max_KS_id) max_KS_id = temp_KS.get_id();
+			KS_es.emplace(temp_KS.get_id(), temp_KS);
 		}
 	}
-
-	truba_type::sId = max_pipe_id+1;
-	KS_type::sId = max_KS_id+1;
 
 	fin.close();
 }

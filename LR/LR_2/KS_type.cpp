@@ -7,6 +7,10 @@ KS_type::KS_type() :id(sId++) {
 
 }
 
+int KS_type::get_id()const {
+	return id;
+}
+
 void KS_type::vvod() {
 	
 	double input;
@@ -43,19 +47,6 @@ void KS_type::vvod() {
 
 }
 
-void KS_type::vivod() {
-		cout << endl << "Параметры КС " << id << endl;
-
-		cout << "Id КС : " << id << endl;
-
-		cout << "Название КС: " << name << endl;
-
-		cout << "Число цехов КС: " << workshop_number << endl;
-
-		cout << "Число работающих цехов КС: " << working_workshops << endl;
-
-		cout << "Эффективность КС : " << effectiveness << endl;
-}
 //изменение кол-ва рабочих цехов
 void KS_type::edit() {    
 	double ammount = 0;
@@ -77,13 +68,7 @@ void KS_type::edit() {
 	cout << "Число работающих цехов на данный момент :" << working_workshops << endl;
 
 }
-//сохранение в файл
-void KS_type::save(std::ofstream& fout) {
 
-	fout << "k" << "|"<< id << "|" << name << "|" <<
-		workshop_number << "|" << working_workshops <<"|"<< effectiveness << "|"<<endl;
-	cout << "КС " << id << " Успешно Сохранена!" << endl;
-}
 //загрузка из файла
 void KS_type::load(std::ifstream& fin, std::string load_string) {
 
@@ -103,6 +88,7 @@ void KS_type::load(std::ifstream& fin, std::string load_string) {
 			switch (j) {
 			case 0:
 				id = stoi(temp_string);
+				sId = id+1;
 				break;
 			case 1:
 				name = temp_string;
@@ -137,4 +123,33 @@ void KS_type::load(std::ifstream& fin, std::string load_string) {
 
 	}
 
+	
+
+}
+
+std::ostream& operator<<(std::ostream& os, const KS_type& k_t) {
+
+	os << endl << "Параметры КС " << k_t.get_id() << endl;
+
+	os << "Id КС : " << k_t.get_id() << endl;
+
+	os << "Название КС: " << k_t.name << endl;
+
+	os << "Число цехов КС: " << k_t.workshop_number << endl;
+
+	os << "Число работающих цехов КС: " << k_t.working_workshops << endl;
+
+	os << "Эффективность КС : " << k_t.effectiveness << endl;
+
+	return os;
+
+}
+
+std::ofstream& operator<<(std::ofstream& ofs, const KS_type& k_t) {
+
+	ofs << "k" << "|" << k_t.get_id()<< "|" << k_t.name << "|" <<
+		k_t.workshop_number << "|" << k_t.working_workshops << "|" << k_t.effectiveness << "|" << endl;
+	cout << "КС " << k_t.get_id() << " Успешно Сохранена!" << endl;
+
+	return ofs;
 }

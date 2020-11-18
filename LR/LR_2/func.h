@@ -79,7 +79,7 @@ template <typename T> void vivod_vsego(map<int , T>& objects, std::string class_
 {
 	if (objects.size() > 0) {
 		for (auto i : objects) {
-			i.second.vivod();
+			cout<<i.second;
 		}
 	}
 	else {
@@ -95,7 +95,7 @@ template <typename T> vector<int> find_by_name(map<int,T>& objects, const bool& 
 	vector <int> found = name_to_id(objects, name_selection);
 	if (found.size() > 0) {
 		for (auto i : found) {
-			if (output) objects[i].vivod();
+			if (output) cout<<objects[i];
 		}
 	}
 	else {
@@ -118,7 +118,7 @@ template <typename T> vector<int> find_by_filter(map<int,T>& objects) {
 		for (auto j : found_2) {
 			if (i == j) {
 				found.push_back(i);
-				objects[i].vivod();
+				cout<<objects[i];
 			}
 		}
 	}
