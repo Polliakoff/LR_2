@@ -26,22 +26,6 @@ void package_edit(vector<int>& found, map<int, KS_type>& KS_es);
 vector<int> pipes_in_service(map <int, truba_type> pipes, bool in_service);
 vector<int> ks_by_eff(map<int, KS_type> KS_es, double effectiveness);
 
-template <typename T> int id_search(map<int, T> objects, int id)
-{
-
-	if (objects.size() > 0) {
-		for (auto i : objects) {
-			i.first == id;
-			return 0;
-		}	
-		return -1;
-	}
-	else {
-		return -1;
-	}
-
-}
-
 template <typename T> vector<int> name_to_id(map<int,T> objects, std::string name)
 {
 	vector<int> return_vector;
@@ -157,7 +141,7 @@ template <typename T> void delete_object(map<int,T>& objects, string name) {
 
 		input_and_check(id_selection, 1);
 
-		if (id_search(objects, int(id_selection)) != -1) {
+		if (objects.find(int(id_selection)) != objects.end()) {
 
 			objects.erase(int(id_selection));
 

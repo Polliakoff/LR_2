@@ -129,7 +129,7 @@ void edit_by_id(map<int, truba_type>& pipes){
 
 	input_and_check(id_selection, 1);
 
-	if (id_search(pipes, int(id_selection)) == -1) {
+	if (!(pipes.find(int(id_selection)) != pipes.end())) {
 		cout << "Введите id одной из существующих труб" << endl;
 	}
 	else {
@@ -144,11 +144,11 @@ void edit_by_id(map<int, KS_type>& KS_es) {
 
 	input_and_check(id_selection, 1);
 
-	if (id_search(KS_es, int(id_selection)) == -1) {
+	if (!(KS_es.find(int(id_selection)) != KS_es.end())) {
 		cout << "Введите id одной из существующих КС" << endl;
 	}
 	else {
-		KS_es[id_search(KS_es, int(id_selection))].number_working();
+		KS_es[id_selection].number_working();
 	}
 }
 
